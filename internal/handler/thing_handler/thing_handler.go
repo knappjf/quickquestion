@@ -3,7 +3,7 @@ package thing_handler
 import (
 	"encoding/json"
 	"github.com/julienschmidt/httprouter"
-	jsonDecoder "github.com/knappjf/quickquestion/internal/decoders/json"
+	"github.com/knappjf/quickquestion/internal/decoders"
 	"github.com/knappjf/quickquestion/internal/models"
 	"github.com/knappjf/quickquestion/internal/repository"
 	"go.uber.org/fx"
@@ -24,7 +24,7 @@ type Params struct {
 	fx.In
 
 	Repository repository.ThingRepository
-	Decoder    jsonDecoder.JsonDecoder
+	Decoder    decoders.Decoder
 }
 
 func New(p Params) (ThingHandler, error) {
@@ -36,18 +36,19 @@ func New(p Params) (ThingHandler, error) {
 
 type thingHandler struct {
 	repo    repository.ThingRepository
-	decoder jsonDecoder.JsonDecoder
+	decoder decoders.Decoder
 }
 
 func (h *thingHandler) CreateThing(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
 	var thing models.Thing
 
-	if err := h.decoder.DecodeRequest(r, &thing); err != nil {
+	_, err := h.decoder.DecodeRequest(r, &thing)
+	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 
-	err := h.repo.CreateThing(thing)
+	err = h.repo.CreateThing(thing)
 
 	if err != nil {
 		w.WriteHeader(500)
@@ -108,7 +109,7 @@ func (h *thingHandler) UpdateThing(w http.ResponseWriter, r *http.Request, param
 
 	var thing models.Thing
 
-	if err := h.decoder.DecodeRequest(r, &thing); err != nil {
+	if _, err := h.decoder.DecodeRequest(r, &thing); err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
