@@ -3,17 +3,18 @@ package json
 
 import (
 	"encoding/json"
+	"github.com/knappjf/quickquestion/internal/decoders/interfaces"
 	"net/http"
 	"strings"
 )
 
-func New() *jsonDecoder {
-	return &jsonDecoder{}
+func New() interfaces.Decoder {
+	return jsonDecoder{}
 }
 
 type jsonDecoder struct{}
 
-func (jd *jsonDecoder) DecodeRequest(r *http.Request, dest interface{}) (bool, error) {
+func (jd jsonDecoder) DecodeRequest(r *http.Request, dest interface{}) (bool, error) {
 	contentTypeParts := strings.Split(r.Header.Get("Content-Type"), ";")
 
 	if contentTypeParts[0] == "application/json" {

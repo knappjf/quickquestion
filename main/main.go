@@ -1,8 +1,9 @@
 package main
 
 import (
+	"github.com/knappjf/quickquestion/internal/config"
 	"github.com/knappjf/quickquestion/internal/database"
-	jsonDecoder "github.com/knappjf/quickquestion/internal/decoders/json"
+	"github.com/knappjf/quickquestion/internal/decoders"
 	"github.com/knappjf/quickquestion/internal/handler"
 	"github.com/knappjf/quickquestion/internal/repository"
 	"github.com/knappjf/quickquestion/internal/routes"
@@ -15,10 +16,11 @@ func main() {
 
 func opts() fx.Option {
 	return fx.Options(
+		config.Module,
+		decoders.Module,
 		handler.Module,
 		database.Module,
 		repository.Module,
-		jsonDecoder.Module,
 		fx.Invoke(routes.Register),
 	)
 }

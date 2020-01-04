@@ -1,13 +1,12 @@
 package decoders
 
-import "net/http"
-
-type Decoder interface {
-	DecodeRequest(*http.Request, interface{}) (bool, error)
-}
+import (
+	"github.com/knappjf/quickquestion/internal/decoders/interfaces"
+	"net/http"
+)
 
 type decoder struct {
-	decoders []Decoder
+	decoders []interfaces.Decoder
 }
 
 func (d *decoder) DecodeRequest(request *http.Request, destination interface{}) (bool, error) {

@@ -2,7 +2,9 @@ package routes
 
 import (
 	"context"
+	"fmt"
 	"github.com/julienschmidt/httprouter"
+	"github.com/knappjf/quickquestion/internal/config"
 	"github.com/knappjf/quickquestion/internal/handler/thing_handler"
 	"go.uber.org/fx"
 	"net/http"
@@ -13,6 +15,7 @@ type Params struct {
 
 	Lifecycle fx.Lifecycle
 	Handler   thing_handler.ThingHandler
+	Config    config.Config
 }
 
 func Register(p Params) {
@@ -23,7 +26,7 @@ func Register(p Params) {
 	router.Handle("DELETE", "/v1/things/:id", p.Handler.DeleteThing)
 
 	server := http.Server{
-		Addr:    ":8080",
+		Addr:    fmt.Sprintf("%s:%d", p.Config.Address, p.Config.Port),
 		Handler: router,
 	}
 

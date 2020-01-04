@@ -1,0 +1,9 @@
+{
+  "address": "localhost",
+  "port": 8080,
+  "tls": false,
+  "http_2": false,
+  "cert": "",
+  "key": "",
+  "database": "things.db"
+}

@@ -3,7 +3,7 @@ package thing_handler
 import (
 	"encoding/json"
 	"github.com/julienschmidt/httprouter"
-	"github.com/knappjf/quickquestion/internal/decoders"
+	"github.com/knappjf/quickquestion/internal/decoders/interfaces"
 	"github.com/knappjf/quickquestion/internal/models"
 	"github.com/knappjf/quickquestion/internal/repository"
 	"go.uber.org/fx"
@@ -24,7 +24,7 @@ type Params struct {
 	fx.In
 
 	Repository repository.ThingRepository
-	Decoder    decoders.Decoder
+	Decoder    interfaces.Decoder
 }
 
 func New(p Params) (ThingHandler, error) {
@@ -36,7 +36,7 @@ func New(p Params) (ThingHandler, error) {
 
 type thingHandler struct {
 	repo    repository.ThingRepository
-	decoder decoders.Decoder
+	decoder interfaces.Decoder
 }
 
 func (h *thingHandler) CreateThing(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
