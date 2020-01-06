@@ -7,6 +7,7 @@ import (
 	"github.com/knappjf/quickquestion/internal/config"
 	"github.com/knappjf/quickquestion/internal/handler/thing_handler"
 	"go.uber.org/fx"
+	"log"
 	"net/http"
 )
 
@@ -33,7 +34,16 @@ func Register(p Params) {
 	p.Lifecycle.Append(
 		fx.Hook{
 			OnStart: func(ctx context.Context) error {
-				go server.ListenAndServe()
+				if p.Config.TLS {
+					go func() {
+						log.Fatal(server.ListenAndServeTLS(p.Config.Cert, p.Config.Key))
+					}()
+				} else {
+					go func() {
+						log.Fatal(server.ListenAndServe())
+					}()
+				}
+
 				return nil
 			},
 			OnStop: func(ctx context.Context) error {
