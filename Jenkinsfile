@@ -25,7 +25,7 @@ node {
                     //Produced binary is $GOPATH/src/cmd/project/project
                     sh """cd $BUILDPATH && go build -ldflags '-s'"""
                 }
-      
+        }
     }catch (e) {
         // If there was an exception thrown, the build failed
         currentBuild.result = "FAILED"        
