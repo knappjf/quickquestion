@@ -9,6 +9,8 @@ node {
                 
                 stage('Pre Test'){
                     echo 'Pulling Dependencies'
+
+                    echo $BUILDPATH
                     
                     //or -update
                     sh """cd $BUILDPATH && go mod tidy"""
